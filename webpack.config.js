@@ -22,6 +22,7 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: {
       "@": path.resolve(__dirname, "src"),
+      "@shared/types": path.resolve(__dirname, "../shared-types/src"),
     },
   },
   module: {
@@ -47,7 +48,8 @@ module.exports = {
       filename: "remoteEntry.js",
       exposes: {
         "./App": "./src/App.tsx",
-        "./Card": "./src/Card.tsx",
+        // Card removed
+        "./actions": "./src/actions.ts",
       },
       shared: {
         react: { singleton: true, requiredVersion: "^18.2.0" },
