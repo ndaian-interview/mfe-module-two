@@ -1,14 +1,21 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { container } = require("webpack");
+const Dotenv = require("dotenv-webpack");
+
+// Load environment variables
+require("dotenv").config({ path: `.env.${process.env.NODE_ENV || "development"}` });
+require("dotenv").config(); // Load base .env
+
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 module.exports = {
   entry: "./src/index.tsx",
-  mode: "development",
+  mode: isDevelopment ? "development" : "production",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].js",
-    publicPath: "http://localhost:3002/",
+    publicPath: process.env.PUBLIC_URL || "http://localhost:3002/",
     clean: true,
   },
   devServer: {
@@ -39,6 +46,12 @@ module.exports = {
     ],
   },
   plugins: [
+    new Dotenv({
+      path: `.env.${process.env.NODE_ENV || "development"}`,
+      safe: false,
+      systemvars: true,
+      defaults: ".env",
+    }),
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       title: "Module Two",
@@ -58,5 +71,5 @@ module.exports = {
       },
     }),
   ],
-  devtool: "source-map",
+  devtool: isDevelopment ? "source-map" : false,
 };
